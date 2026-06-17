@@ -10,11 +10,11 @@ const Signin = () => {
         href="/(auth)/Sign-in"
         className="mt-4 rounded bg-primary text-white p-4"
       >
-        Log in
+        <Text>Log in</Text>
       </Link>
-      link to home
+
       <Link href="/" className=" mt-4 p-64: rounded bg-primary text-white p-4">
-        back
+        <Text>Back</Text>
       </Link>
     </View>
   );

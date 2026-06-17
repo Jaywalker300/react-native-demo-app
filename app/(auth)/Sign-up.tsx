@@ -5,16 +5,15 @@ import { Text, View } from "react-native";
 const SignUp = () => {
   return (
     <View className="flex-1 items-center justify-center bg-background">
-      <Text>Signin</Text>
+      <Text>Sign Up</Text>
       <Link
         href="/(auth)/Sign-up"
         className="mt-4 rounded bg-primary text-white p-4"
       >
-        Create Account
+        <Text>Create Account</Text>
       </Link>
-      link to home
       <Link href="/" className=" mt-4 p-64: rounded bg-primary text-white p-4">
-        back
+        <Text>Back</Text>
       </Link>
     </View>
   );
