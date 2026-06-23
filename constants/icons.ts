@@ -1,5 +1,6 @@
 import activity from "@/assets/icons/activity.png";
 import add from "@/assets/icons/add.png";
+import addOutline from "@/assets/icons/addOutline.png";
 import adobe from "@/assets/icons/adobe.png";
 import back from "@/assets/icons/back.png";
 import canva from "@/assets/icons/canva.png";
@@ -23,6 +24,7 @@ export const icons = {
   setting,
   activity,
   add,
+  addOutline,
   back,
   menu,
   plus,

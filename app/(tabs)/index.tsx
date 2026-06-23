@@ -1,41 +1,149 @@
+import ListHeading from "@/components/ListHeading";
+import SubscriptionCard from "@/components/SubscriptionCard";
+import UpcomingSubscriptionCard from "@/components/UpcomingSubscriptionCard";
+import {
+  HOME_BALANCE,
+  HOME_SUBSCRIPTIONS,
+  HOME_USER,
+  UPCOMING_SUBSCRIPTIONS,
+} from "@/constants/data";
+import { icons } from "@/constants/icons";
+import images from "@/constants/images";
 import "@/global.css";
-import { Link } from "expo-router";
+import { formatCurrency } from "@/lib/utils";
+import dayjs from "dayjs";
 import { styled } from "nativewind";
-import { Text } from "react-native";
+import React, { useState } from "react";
+import { FlatList, Image, Text, View } from "react-native";
 import { SafeAreaView as RNSafeAreaView } from "react-native-safe-area-context";
 
 const SafeAreaView = styled(RNSafeAreaView);
 
 export default function App() {
+  const [expandedSubscriptionId, setExpandedSubscriptionId] = useState<
+    string | null
+  >(null);
+
   return (
-    <SafeAreaView className="flex-1 bg-background p-5">
-      <Text className="text-7xl font-extrabold text-primary">Home</Text>
-      <Link
-        href="/Onboarding"
-        className="mt-4 rounded font-sans-bold bg-primary text-white p-4"
-      >
-        Go to Onboarding
-      </Link>
+    <SafeAreaView className="flex-1 bg-background ">
+      <FlatList
+        data={HOME_SUBSCRIPTIONS}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <View className="px-5">
+            <SubscriptionCard
+              {...item}
+              expanded={expandedSubscriptionId === item.id}
+              onPress={() =>
+                setExpandedSubscriptionId((currentId) =>
+                  currentId === item.id ? null : item.id,
+                )
+              }
+            />
+          </View>
+        )}
+        extraData={expandedSubscriptionId}
+        ItemSeparatorComponent={() => <View className="h-4" />}
+        contentContainerClassName="pb-30"
+        ListHeaderComponent={
+          <View className="p-5">
+            <View className="home-header">
+              <View className="home-user">
+                <Image source={images.MyAvatar} className="home-avatar" />
+                <Text className="home-user-name">{HOME_USER.name}</Text>
+              </View>
 
-      <Link
-        href="/(auth)/Sign-up"
-        className="mt-4 rounded font-sans-bold bg-primary text-white p-4"
-      >
-        go to sign up
-      </Link>
+              <Image source={icons.addOutline} className="home-add-icon" />
+            </View>
 
-      <Link
-        href="/(auth)/Sign-in"
-        className="mt-4 rounded font-sans-bold bg-primary text-white p-4"
-      >
-        go to Log in
-      </Link>
-      <Link
-        href="/subscriptions"
-        className="mt-4 rounded font-sans-bold bg-primary text-white p-4"
-      >
-        Subscriptions
-      </Link>
+            <View className="home-balance-card">
+              <Text className="home-balance-label">Balance</Text>
+
+              <View className="home-balance-row">
+                <Text className="home-balance-amount">
+                  {formatCurrency(HOME_BALANCE.amount)}
+                </Text>
+
+                <Text className="home-balance-date">
+                  {dayjs(HOME_BALANCE.nextRenewalDate).format("DD/MM")}
+                </Text>
+              </View>
+            </View>
+
+            <ListHeading title="Upcoming" />
+
+            <FlatList
+              data={UPCOMING_SUBSCRIPTIONS}
+              renderItem={({ item }) => <UpcomingSubscriptionCard {...item} />}
+              keyExtractor={(item) => item.id}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+            />
+
+            <ListHeading title="All Subscriptions" />
+          </View>
+        }
+      />
     </SafeAreaView>
   );
+
+  // return (
+  //   <SafeAreaView className="flex-1 bg-background p-5">
+  //     <View className="home-header">
+  //       <View className="home-user">
+  //         <Image source={images.MyAvatar} className="home-avatar" />
+  //         <Text className="home-user-name">{HOME_USER.name}</Text>
+  //       </View>
+  //       <Image source={icons.addOutline} className="home-add-icon" />
+  //     </View>
+  //     <View className="home-balance-card">
+  //       <Text className="home-balance-label"> Balance</Text>
+  //       <View className="home-balance-row">
+  //         <Text className="home-balance-amount">
+  //           {formatCurrency(HOME_BALANCE.amount)}
+  //         </Text>
+  //         <Text className="home-balance-date">
+  //           {dayjs(HOME_BALANCE.nextRenewalDate).format("DD/MM")}
+  //         </Text>
+  //       </View>
+  //     </View>
+
+  //     <View className="mb-5">
+  //       <ListHeading title="Upcoming" />
+
+  //       <FlatList
+  //         data={UPCOMING_SUBSCRIPTIONS}
+  //         renderItem={({ item }) => <UpcomingSubscriptionCard {...item} />}
+  //         keyExtractor={(item) => item.id}
+  //         horizontal
+  //         showsHorizontalScrollIndicator={false}
+  //         ListEmptyComponent={
+  //           <Text className="home-empty-state"> No upcoming renewals yet</Text>
+  //         }
+  //       />
+  //     </View>
+
+  //     <View className="flex-1">
+  //       <ListHeading title="All Subscriptions" />
+  //       <FlatList
+  //         data={HOME_SUBSCRIPTIONS}
+  //         keyExtractor={(item) => item.id}
+  //         renderItem={({ item }) => (
+  //           <SubscriptionCard
+  //             {...item}
+  //             expanded={expandedSubscriptionId === item.id}
+  //             onPress={() =>
+  //               setExpandedSubscriptionId((currentId) =>
+  //                 currentId === item.id ? null : item.id,
+  //               )
+  //             }
+  //           />
+  //         )}
+  //         extraData={expandedSubscriptionId}
+  //         ItemSeparatorComponent={() => <View className="h-4" />}
+  //         showsVerticalScrollIndicator={false}
+  //       />
+  //     </View>
+  //   </SafeAreaView>
+  // );
 }
